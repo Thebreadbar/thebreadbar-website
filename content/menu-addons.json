@@ -1,0 +1,173 @@
+{
+  "tab": "Add-ons",
+  "sections": [
+    {
+      "title": "Protein Add-Ons",
+      "note": "",
+      "items": [
+        {
+          "name": "Chicken Patty",
+          "description": "",
+          "price": 7,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Grilled Chicken",
+          "description": "",
+          "price": 10,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Beef Bacon",
+          "description": "",
+          "price": 11,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Smoked Salmon",
+          "description": "",
+          "price": 11,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Beef Prosciutto",
+          "description": "",
+          "price": 13,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Tiger Prawns (3pcs)",
+          "description": "",
+          "price": 11,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Scallops (3pcs)",
+          "description": "",
+          "price": 13,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        }
+      ]
+    },
+    {
+      "title": "Egg Add-Ons",
+      "note": "",
+      "items": [
+        {
+          "name": "Sunny-side-up",
+          "description": "",
+          "price": 3.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Scrambled",
+          "description": "",
+          "price": 6.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Poached",
+          "description": "",
+          "price": 3.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "6-Minute",
+          "description": "",
+          "price": 3.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        }
+      ]
+    },
+    {
+      "title": "Sides",
+      "note": "",
+      "items": [
+        {
+          "name": "Sourdough Slices (4pcs)",
+          "description": "",
+          "price": 5.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Half Avocado",
+          "description": "",
+          "price": 6.8,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "French Fries",
+          "description": "",
+          "price": 6,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Sautéed Mushrooms",
+          "description": "",
+          "price": 4.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Mixed Side Salad",
+          "description": "",
+          "price": 4.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        }
+      ]
+    },
+    {
+      "title": "Cheese",
+      "note": "",
+      "items": [
+        {
+          "name": "Cheddar Cheese (slice)",
+          "description": "",
+          "price": 3,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        },
+        {
+          "name": "Provolone Cheese (slice)",
+          "description": "",
+          "price": 3,
+          "pricePublika": null,
+          "outlets": "both",
+          "show": true
+        }
+      ]
+    }
+  ]
+}

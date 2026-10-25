@@ -1,0 +1,13 @@
+{
+  "ttdi": {
+    "opens": "08:00",
+    "closes": "22:00"
+  },
+  "publika": {
+    "opens": "08:00",
+    "closes": "22:00"
+  },
+  "brunchFrom": "08:00",
+  "brunchUntil": "17:00",
+  "notice": ""
+}

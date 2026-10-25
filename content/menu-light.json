@@ -1,0 +1,222 @@
+{
+  "tab": "Light",
+  "sections": [
+    {
+      "title": "Small Plates",
+      "note": "available all day",
+      "items": [
+        {
+          "name": "Assorted Slices of Sourdough Bread",
+          "description": "toasted & served with salted butter",
+          "price": 17,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/sourdough-slices.jpg",
+          "show": true,
+          "extras": [
+            {
+              "text": "alternate butter: truffle / kombu",
+              "price": 6.5
+            },
+            {
+              "text": "add-on butter: truffle / kombu",
+              "price": 8
+            }
+          ]
+        },
+        {
+          "name": "Prawn Toast",
+          "description": "deep-fried sourdough, tiger prawn mix, crispy millet grains, coriander yoghurt",
+          "price": 26,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/prawn-toast.jpg",
+          "show": true,
+          "extras": [],
+          "video": "prawn-toast"
+        },
+        {
+          "name": "Truffle Fries",
+          "description": "with grana padano, sriracha mayo",
+          "price": 24,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/truffle-fries.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Spiced Cauliflower Tempura",
+          "description": "with sriracha mayo",
+          "price": 24,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Roasted Broccoli and Cauliflower Salad",
+          "description": "served with labneh, rocket, crispy shallots, garlic-infused chilli oil",
+          "price": 26.5,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/broccoli-cauliflower-salad.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Smoked Duck and Pineapple Salsa",
+          "description": "with roasted zaalouk sauce, homemade sourdough chips",
+          "price": 25,
+          "pricePublika": null,
+          "outlets": "ttdi",
+          "vegetarian": false,
+          "photo": "/assets/photos/smoked-duck-pineapple.jpg",
+          "show": true,
+          "extras": []
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Soup",
+      "note": "available all day",
+      "items": [
+        {
+          "name": "Prawn Bisque",
+          "description": "rich prawn bisque, tiger prawns, leek, croutons",
+          "price": 31,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/prawn-bisque.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Roasted Tomato Soup",
+          "description": "served with sourdough",
+          "price": 23,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/roasted-tomato-soup.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Wild Truffle Mushroom Soup",
+          "description": "served with sourdough",
+          "price": 29,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "",
+          "show": true,
+          "extras": []
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Tartines / Sandwiches",
+      "note": "available all day",
+      "items": [
+        {
+          "name": "Smashed Avocado Tartine",
+          "description": "with chunky cherry tomato salsa, basil vinaigrette, crumbled feta cheese",
+          "price": 25,
+          "pricePublika": null,
+          "outlets": "ttdi",
+          "vegetarian": false,
+          "photo": "/assets/photos/smashed-avocado-tartine.jpg",
+          "show": true,
+          "extras": [
+            {
+              "text": "add-on poached egg",
+              "price": 3.5
+            }
+          ]
+        },
+        {
+          "name": "Avocado Spiced Chicken Sandwich",
+          "description": "roasted spiced chicken, fresh avocado, sun-dried tomato salsa, homemade pickles",
+          "price": 34,
+          "pricePublika": null,
+          "outlets": "pub",
+          "vegetarian": false,
+          "photo": "/assets/photos/avocado-spiced-chicken-sandwich.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Signature Grilled Cheese Sandwich",
+          "description": "with wholegrain mustard",
+          "price": 30,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/grilled-cheese.jpg",
+          "show": true,
+          "extras": [
+            {
+              "text": "add-on roasted tomato soup",
+              "price": 15
+            }
+          ]
+        },
+        {
+          "name": "Corned Beef Sandwich",
+          "description": "with aged cheddar cheese, jalapeño cream, homemade pickles, wholegrain mustard",
+          "price": 36,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/corned-beef-sandwich.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Tuna Melt Sandwich",
+          "description": "tuna, capers, dill, aioli, mozzarella cheese, aged cheddar, homemade pickles, wholegrain mustard",
+          "price": 31,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/tuna-melt.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Homemade Focaccia with Beef Prosciutto",
+          "description": "pine nut pesto, cream cheese, sun-dried tomatoes, chilli oil, rocket",
+          "price": 38,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/focaccia-beef-prosciutto.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Homemade Focaccia with Chicken Ham",
+          "description": "red pepper pesto, melted provolone cheese, sun-dried tomatoes, rocket",
+          "price": 36,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/focaccia-chicken-ham.jpg",
+          "show": true,
+          "extras": []
+        }
+      ],
+      "extras": []
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "tab": "Dessert",
+  "sections": [
+    {
+      "title": "The Bread Bar / Dessert",
+      "note": "available all day",
+      "items": [
+        {
+          "name": "The Bread Bar",
+          "description": "discover our daily spread of freshly baked goods at the counter",
+          "price": null,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "",
+          "show": true,
+          "extras": [],
+          "link": "#bakery"
+        },
+        {
+          "name": "French Toast Banana Split",
+          "description": "brioche bread, cinnamon, caramelised banana, vanilla ice cream, caramel sauce",
+          "price": 28,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/french-toast-banana.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Classic Homemade Tiramisu",
+          "description": "layers of coffee-soaked sponge fingers, mascarpone",
+          "price": 25,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/tiramisu.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Biscoff Affogato",
+          "description": "vanilla bean ice cream, Biscoff paste, crumble, espresso shot",
+          "price": 23,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/biscoff-affogato.jpg",
+          "show": true,
+          "extras": []
+        }
+      ],
+      "extras": []
+    }
+  ]
+}

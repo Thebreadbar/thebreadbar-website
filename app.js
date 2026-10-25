@@ -1,16 +1,134 @@
-/* The Bread Bar — hash-routed single page site. Content lives in data.js. */
+/* The Bread Bar — hash-routed single page site. Content lives in data.js; the owner-editable parts (menu, bakery
+   prices, opening hours) are overridden at start from content/*.json, which the owner edits at /admin/ (Sveltia CMS).
+   Any content file that fails to load or parse is skipped, so data.js values show instead and the page never stays
+   blank. Editor text only reaches the page through esc() / textContent. */
 (() => {
+  const D = window.TBB;
+  // (an older cached data.js has no `opening`: start from the usual hours)
+  D.opening = D.opening || { ttdi: { opens: "08:00", closes: "22:00" }, publika: { opens: "08:00", closes: "22:00" }, brunchFrom: "08:00", brunchUntil: "17:00", notice: "" };
+  const str = (v) => (typeof v === "string" ? v : v == null || typeof v === "object" ? "" : String(v)).trim();
+  const num = (v) => { if (v === "" || v == null || typeof v === "boolean") return null; const n = Number(v); return isFinite(n) && n >= 0 ? n : null; };
+  const shown = (x) => x && typeof x === "object" && x.show !== false && str(x.name);
+  const list = (v) => (Array.isArray(v) ? v : []);
+  const clip = (v) => (/^[\w-]+$/.test(str(v)) ? str(v) : undefined); // video names are fixed files in assets/video
+  // add-on lines like ["alternate butter: truffle / kombu", "+ 6.5"]; undefined when there are none
+  const extrasIn = (v) => { const e = list(v).filter((x) => x && str(x.text)).map((x) => [str(x.text), num(x.price) == null ? "" : `+ ${num(x.price).toFixed(1)}`]); return e.length ? e : undefined; };
+  const itemIn = (x, cat) => {
+    const it = { n: str(x.name) };
+    if (x.show === false) it.hidden = true;
+    if (str(x.description)) it.d = str(x.description);
+    if (cat.hc) it.p = [num(x.priceHot), num(x.priceCold)];
+    else { const a = num(x.price), b = num(x.pricePublika); it.p = b != null && b !== a ? { ttdi: a, pub: b } : a; }
+    if (x.outlets === "ttdi" || x.outlets === "pub") it.only = x.outlets;
+    if (x.vegetarian === true) it.v = true;
+    if (str(x.photo)) it.img = str(x.photo);
+    if (clip(x.video)) it.vid = clip(x.video);
+    if (/^#[\w-]+$/.test(str(x.link))) it.link = str(x.link);
+    const ex = extrasIn(x.extras); if (ex) it.extras = ex;
+    return it;
+  };
+  const apply = {
+    menu(json, cat) {
+      const sections = list(json.sections).filter((s) => s && Array.isArray(s.items)).map((s) => {
+        const sec = { title: str(s.title), items: s.items.filter((x) => x && typeof x === "object" && str(x.name)).map((x) => itemIn(x, cat)) };
+        if (str(s.note)) sec.note = str(s.note);
+        const ex = extrasIn(s.extras); if (ex) sec.extras = ex;
+        return sec;
+      });
+      if (!sections.some((s) => s.items.length)) throw new Error("no items");
+      cat.sections = sections;
+      if (str(json.tab)) cat.name = str(json.tab);
+    },
+    bakery(json) {
+      const loaves = list(json.loaves).filter(shown).map((x) => ({ n: str(x.name), p: num(x.price) ?? "", img: str(x.photo) || "assets/texture-terracotta.jpg",
+        g: num(x.weight) ?? "", flour: str(x.flour), notes: str(x.tasting) || undefined, crust: str(x.crust), tang: str(x.tang), crumb: str(x.crumb),
+        inc: str(x.inclusions), hyd: Math.min(100, num(x.hydration) ?? 0) }));
+      if (loaves.length) D.loaves = loaves;
+      if (Array.isArray(json.pastries)) D.pastry = json.pastries.filter(shown).map((x) => [str(x.name), num(x.price), str(x.photo) || undefined, clip(x.video)]);
+      if (Array.isArray(json.cakeSlices)) D.cakeSlices = json.cakeSlices.filter(shown).map((x) => [str(x.name), num(x.price) ?? ""]);
+      if (Array.isArray(json.wholeCakes)) D.wholeCakes = json.wholeCakes.filter(shown).map((x) => str(x.name));
+      const beans = list(json.beans).filter((x) => x && str(x.size)).map((x) => [str(x.size), num(x.price) ?? ""]);
+      if (beans.length) D.beans.sizes = beans;
+    },
+    hours(json) {
+      const o = D.opening, t = (v, d) => (/^([01]\d|2[0-4]):[0-5]\d$/.test(str(v)) ? str(v) : d);
+      for (const k of ["ttdi", "publika"]) if (json[k]) o[k] = { opens: t(json[k].opens, o[k].opens), closes: t(json[k].closes, o[k].closes) };
+      o.brunchFrom = t(json.brunchFrom, o.brunchFrom); o.brunchUntil = t(json.brunchUntil, o.brunchUntil);
+      if (typeof json.notice === "string") o.notice = json.notice.trim();
+    },
+  };
+  const files = [["hours", (j) => apply.hours(j)], ["bakery", (j) => apply.bakery(j)],
+    ...D.menu.map((cat) => [`menu-${cat.id}`, (j) => apply.menu(j, cat)])];
+  // no-cache = the browser re-checks each file (a quick 304 when unchanged), so an edit shows on the next refresh
+  const load = ([name]) => fetch(`content/${name}.json`, { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  let started = false;
+  const start = (results) => {
+    if (started) return; started = true;
+    (results || []).forEach((json, i) => {
+      if (!json || typeof json !== "object") return;
+      try { files[i][1](json); } catch (e) { console.warn(`content/${files[i][0]}.json skipped:`, e.message); }
+    });
+    startSite();
+  };
+  setTimeout(() => start(null), 4000); // slow network: show data.js content rather than an empty page
+  try { Promise.all(files.map(load)).then(start, () => start(null)); } catch (e) { start(null); }
+})();
+
+function startSite() {
   const D = window.TBB;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const app = $("#app");
   if ("scrollRestoration" in history) history.scrollRestoration = "manual"; // the router sets scroll itself
-  const photo = (slug) => `assets/photos/${slug}.jpg`;
+  // photo: a bare slug from data.js ("prawn-toast") or a path from the editor ("/assets/uploads/x.webp"); always relative
+  // (the review preview lives in a sub-folder) and escaped for use in attributes.
+  const photo = (s) => esc(/[/.]/.test(s) ? String(s).replace(/^\/+/, "") : `assets/photos/${s}.jpg`);
+  const slugOf = (s) => String(s || "").replace(/^.*\//, "").replace(/\.[a-z0-9]+$/i, "");
   // Reserve / book a table: the outlet's WhatsApp with the preloaded enquiry prompt (D.events.waPrompt, user's text)
   const resWa = (o) => (D.events.waPrompt ? `${o.whatsapp}?text=${encodeURIComponent(D.events.waPrompt)}` : o.whatsapp);
   const money = (n) => (n == null ? "" : Number(n).toFixed(1));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const OUT = D.outlets;
+  /* Opening hours: data.js `opening`, overridden by content/hours.json. Every hours text on the site comes from here
+     (announcement bar, drawer, outlet blocks, menu + location pages, footer, ticker, About, "Open every day" scene,
+     meta description, the Brunch menu note). With equal hours at both outlets the wording is "Open daily, 8am to 10pm". */
+  const H = (() => {
+    const o = D.opening;
+    const dec = (s) => { const [h, m] = String(s).split(":").map(Number); return h + m / 60; };
+    const span = (x) => { const a = dec(x.opens); let b = dec(x.closes); if (b <= a) b += 24; return [a, b]; }; // past midnight
+    const t = (h) => {
+      h = ((h % 24) + 24) % 24;
+      const hh = Math.floor(h + 1e-6), mm = Math.round((h - hh) * 60);
+      if (!hh && !mm) return "midnight";
+      return `${((hh + 11) % 12) + 1}${mm ? ":" + String(mm).padStart(2, "0") : ""}${hh < 12 ? "am" : "pm"}`;
+    };
+    const out = { ttdi: span(o.ttdi), pub: span(o.publika) };
+    const range = (k) => `${t(out[k][0])} to ${t(out[k][1])}`;
+    const same = range("ttdi") === range("pub");
+    const each = `TTDI ${range("ttdi")} · Publika ${range("pub")}`;
+    const brunch = `${t(dec(o.brunchFrom))} to ${t(dec(o.brunchUntil))}`;
+    const open = Math.min(out.ttdi[0], out.pub[0]), close = Math.max(out.ttdi[1], out.pub[1]);
+    return {
+      t, out, same, open, close, notice: String(o.notice || "").trim(),
+      daily: same ? `Open daily, ${range("ttdi")}` : `Open daily: ${each}`,
+      short: same ? `Open daily ${range("ttdi")}` : each,
+      drawer: same ? `Open daily · ${range("ttdi")}` : each,
+      ticker: same ? [`Open daily ${range("ttdi")}`] : [`TTDI ${range("ttdi")}`, `Publika ${range("pub")}`],
+      outlet: (k) => `Open daily, ${range(k)}`,
+      brunch: `Brunch served ${brunch}`, brunchNote: `available ${brunch}`, brunchUntil: t(dec(o.brunchUntil)),
+      about: same ? `Both outlets are open daily from ${range("ttdi")}` : `TTDI is open daily from ${range("ttdi")} and Publika from ${range("pub")}`,
+      span: `${t(open)} to ${t(close)}`,
+    };
+  })();
+  D.hours = H.daily;
+  D.brunchHours = H.brunch;
+  D.menu.forEach((c) => c.sections.forEach((s) => { if (/^brunch$/i.test(s.title)) s.note = H.brunchNote; }));
+  // the "Open every day" scene runs from the earliest opening to the latest closing; its moments keep their place
+  const dayAt = (h) => H.open + ((h - 8) / 14) * (H.close - H.open);
+  const words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+  const countWord = (n) => (words[n] ? words[n][0].toUpperCase() + words[n].slice(1) : String(n));
+  // the bean bag's line in the shop follows the bean prices on the Bakery page
+  D.shop.items.forEach((x) => { if (x.beansPrices) x.line = D.beans.sizes.map(([s, p]) => `${s} RM ${p}`).join(" · "); });
   const outletKey = (slug) => (slug === "publika" ? "pub" : "ttdi");
   const outletSlug = (key) => (key === "pub" ? "publika" : "ttdi");
 
@@ -39,7 +157,7 @@
       <p class="loc-sub">${esc(o.since)}</p>
       <a class="loc-photo" href="#locations-${outletSlug(key)}"><img src="${o.photo}" alt="${esc(o.full)}" loading="lazy"></a>
       <address>${addr(o)}</address>
-      <p class="loc-meta">${esc(D.hours)} · <span class="nowrap">${esc(o.phone)}</span></p>
+      <p class="loc-meta">${esc(H.outlet(key))} · <span class="nowrap">${esc(o.phone)}</span></p>
       <div class="loc-actions">
         <a class="btn btn-ghost" href="#locations-${outletSlug(key)}">Hours &amp; directions</a>
         ${o.grab ? `<button class="btn" data-chooser="order">Order delivery</button>` : `<a class="btn" href="${o.order}" target="_blank" rel="noopener">Order delivery</a>`}
@@ -99,18 +217,29 @@
   // there at the user's request (25 Oct 2026); the full list on the Bakery page is unchanged.
   const OVEN = ["bread-country-brown", "bread-focaccia-olives", "bread-ancient-grain", "bread-wholemeal-rye"];
   // "Open every day": the day runs 8am > 10pm under the scroll. Real TBB photos and real menu items only.
+  // (h = place on the default 8am-10pm day; dayAt() moves it into the real opening hours)
   const DAY = [
     { h: 8, when: "Morning", img: "pastry-counter", cap: "The pastry counter", line: "Coffee and the morning's bakes." },
-    { h: 10.5, when: "Brunch", img: "turkish-eggs", cap: "Turkish Eggs", line: "Brunch, served until 5pm." },
+    { h: 10.5, when: "Brunch", img: "turkish-eggs", cap: "Turkish Eggs", line: `Brunch, served until ${H.brunchUntil}.` },
     { h: 14, when: "Afternoon", img: "spanish-latte", cap: "Spanish Latte", line: "A slow coffee in the afternoon." },
     { h: 17.5, when: "Evening", img: "herb-crusted-seabass", cap: "Herb Crusted Seabass", line: "Hearty plates and pasta into the evening." },
-    { h: 20, when: "Night", img: "space-service", cap: "Dinner service", line: "Open until 10pm, every day." },
-  ];
+    { h: 20, when: "Night", img: "space-service", cap: "Dinner service", line: `Open until ${H.t(H.close)}, every day.` },
+  ].map((m) => ({ ...m, h: dayAt(m.h) }));
   const DAY_ARC = "M20,190 Q500,-150 980,190";
+  // the scene's clock face, to the quarter hour: "8:00<small>am</small>"
+  const clockAt = (h) => {
+    const mins = Math.round(h * 4) * 15, hh = Math.floor(mins / 60) % 24, mm = mins % 60;
+    return `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, "0")}<small>${hh < 12 ? "am" : "pm"}</small>`;
+  };
   // Live state in Malaysia time (UTC+8), whatever the visitor's own clock says.
   const dayStatus = () => {
     const d = new Date(), h = (d.getUTCHours() + 8) % 24 + d.getUTCMinutes() / 60;
-    return h >= 8 && h < 22 ? "Open now, until 10pm" : "Closed now, opens at 8am";
+    const isOpen = ([a, b]) => (h >= a && h < b) || (h + 24 >= a && h + 24 < b);
+    const on = ["ttdi", "pub"].filter((k) => isOpen(H.out[k]));
+    if (H.same) return on.length ? `Open now, until ${H.t(H.out.ttdi[1])}` : `Closed now, opens at ${H.t(H.out.ttdi[0])}`;
+    if (on.length === 2) return "Open now at both outlets";
+    if (on.length === 1) return `Open now at ${OUT[on[0]].name}, until ${H.t(H.out[on[0]][1])}`;
+    return `Closed now, opens at ${H.t(H.open)}`;
   };
 
   // Product tile: photo or drawing on a soft card, name, one line of detail.
@@ -128,7 +257,14 @@
       ["squid-ink-pasta", "Squid Ink Pasta", 55],
       ["double-cheeseburger", "Signature Double Cheeseburger", 45],
       ["prawn-toast", "Prawn Toast", 26],
-    ];
+    ]
+      // price from the menu (TTDI); hidden on the menu = hidden here; not found = the price above
+      .map(([img, n, p]) => {
+        const it = allItems().find((x) => slugOf(x.img) === img) || allItems().find((x) => x.n.replace(/&/g, "and").toLowerCase() === n.replace(/&/g, "and").toLowerCase());
+        if (it && it.hidden) return null;
+        const q = it && priceFor(it, "ttdi");
+        return [img, n, typeof q === "number" ? q : p];
+      }).filter(Boolean);
     return `
     <section class="hs" data-hero>
       <div class="hs-pin">
@@ -137,7 +273,7 @@
         <div class="hs-loaf"><img src="assets/cutouts/sourdough.png" alt="A Bread Bar sourdough loaf resting on stone-milled flour" width="600" height="360"></div>
         <div class="hs-dust" aria-hidden="true">${DUST}</div>
         <img class="hs-front" src="assets/cutouts/pain-au-chocolat.png" alt="" aria-hidden="true" width="385" height="600">
-        <p class="hs-beat">Eight sourdough loaves, every one naturally leavened.</p>
+        <p class="hs-beat">${countWord(D.loaves.length)} sourdough loaves, every one naturally leavened.</p>
         <div class="hs-copy">
           <p class="hs-lede">Sourdough, pastries, all-day plates and specialty coffee, baked fresh every day in TTDI and Publika.</p>
           <div class="cta-row"><a class="btn" href="#menu">View the menu</a><button class="btn btn-ghost" data-chooser="order">Order delivery</button></div>
@@ -185,10 +321,10 @@
       <div class="wrap">
         <div class="section-head reveal">
           <h2 class="display-xl">Out of the oven</h2>
-          <a class="link-arrow" href="#bakery-loaves">See all 8 loaves</a>
+          <a class="link-arrow" href="#bakery-loaves">See all ${D.loaves.length} loaves</a>
         </div>
         <div class="product-grid">
-          ${OVEN.map((img) => D.loaves.find((l) => l.img === img)).filter(Boolean).map((l) => productCard(photo(l.img), l.n, `RM ${l.p} · ${l.g}g`, "#bakery-loaves")).join("")}
+          ${OVEN.map((img) => D.loaves.find((l) => slugOf(l.img) === img)).filter(Boolean).map((l) => productCard(photo(l.img), l.n, `RM ${l.p} · ${l.g}g`, "#bakery-loaves")).join("")}
         </div>
       </div>
     </section>
@@ -215,7 +351,7 @@
         <h2>${esc(D.beans.name)}</h2>
         <p>${esc(D.beans.blurb)}</p>
         <div class="chips">${D.beans.notes.map((n) => `<span class="chip">${esc(n)}</span>`).join("")}</div>
-        <div class="price-row">${D.beans.sizes.map(([s, p]) => `<div><b>RM ${p}</b><span>${s}</span></div>`).join("")}</div>
+        <div class="price-row">${D.beans.sizes.map(([s, p]) => `<div><b>RM ${esc(p)}</b><span>${esc(s)}</span></div>`).join("")}</div>
         <p style="font:400 13px var(--mono);letter-spacing:.06em;opacity:.75">Blend: ${D.beans.origins.map(esc).join(" · ")}</p>
         <div class="cta-row"><a class="btn" href="#menu-coffee">See the coffee menu</a><button class="btn btn-ghost" data-chooser="order">Order beans online</button></div>
       </div>
@@ -231,14 +367,14 @@
               <path class="arc-lit" d="${DAY_ARC}" clip-path="url(#day-clip)"></path>
             </svg>
             <span class="day-orb"><i class="sun"></i><i class="moon"></i></span>
-            <span class="day-end day-end-l">8am</span><span class="day-end day-end-r">10pm</span>
+            <span class="day-end day-end-l">${esc(H.t(H.open))}</span><span class="day-end day-end-r">${esc(H.t(H.close))}</span>
           </div>
           <div class="day-grid">
             <div class="day-copy">
-              <p class="day-clock" aria-hidden="true">8:00<small>am</small></p>
+              <p class="day-clock" aria-hidden="true">${clockAt(H.open)}</p>
               <p class="day-line" aria-hidden="true">${esc(DAY[0].line)}</p>
-              <h2>Open every day,<br>8am to 10pm.</h2>
-              <p class="day-sub">Brunch until 5pm, hearty plates, pasta and coffee all day, and a counter of fresh bakes until they run out.</p>
+              <h2>Open every day,<br>${esc(H.span)}.</h2>
+              <p class="day-sub">Brunch until ${esc(H.brunchUntil)}, hearty plates, pasta and coffee all day, and a counter of fresh bakes until they run out.</p>
               <p class="day-status" data-day-status><i></i><span>${dayStatus()}</span></p>
               <div class="day-cta"><button class="btn btn-pill day-reserve" data-chooser="reserve">Reserve a table</button></div>
               <p class="cta-note">Book on WhatsApp with the outlet you’re visiting.</p>
@@ -297,7 +433,8 @@
 
   /* ---------------- menu ---------------- */
   const priceFor = (it, outlet) => (it.p && typeof it.p === "object" && !Array.isArray(it.p) ? it.p[outlet] : it.p);
-  const visible = (it, outlet) => !it.only || it.only === outlet;
+  const allItems = () => D.menu.flatMap((c) => c.sections.flatMap((s) => s.items));
+  const visible = (it, outlet) => !it.hidden && (!it.only || it.only === outlet);
 
   const renderItem = (it, cat, outlet, i) => {
     const p = priceFor(it, outlet);
@@ -531,7 +668,7 @@
         <h2>${esc(D.beans.name)}</h2>
         <p>${esc(D.beans.blurb)}</p>
         <div class="chips">${D.beans.notes.map((n) => `<span class="chip">${esc(n)}</span>`).join("")}</div>
-        <div class="price-row">${D.beans.sizes.map(([s, p]) => `<div><b>RM ${p}</b><span>${s}</span></div>`).join("")}</div>
+        <div class="price-row">${D.beans.sizes.map(([s, p]) => `<div><b>RM ${esc(p)}</b><span>${esc(s)}</span></div>`).join("")}</div>
         <p style="font:400 13px var(--mono);letter-spacing:.06em;opacity:.75">Blend: ${D.beans.origins.map(esc).join(" · ")}</p>
         <div class="cta-row"><button class="btn" data-chooser="order">Order beans online</button></div>
       </div>
@@ -569,7 +706,7 @@
       <div class="wrap loc-detail">
         <div class="reveal">
           <dl class="info-list">
-            <div><dt>Hours</dt><dd>${esc(D.hours)}<br><span style="color:var(--muted)">${esc(D.brunchHours)}</span></dd></div>
+            <div><dt>Hours</dt><dd>${esc(H.outlet(key))}<br><span style="color:var(--muted)">${esc(D.brunchHours)}</span></dd></div>
             <div><dt>Address</dt><dd>${addr(o)}<br><a href="${o.maps}" target="_blank" rel="noopener">Open in Google Maps</a></dd></div>
             <div><dt>Phone</dt><dd><a href="tel:${o.tel}">${esc(o.phone)}</a></dd></div>
             <div><dt>Reservations</dt><dd>Reservations &amp; enquiries by <a href="${resWa(o)}" target="_blank" rel="noopener">WhatsApp</a></dd></div>
@@ -606,7 +743,7 @@
     <section class="section">
       <div class="prose reveal">
         <p>The Bread Bar began in Taman Tun Dr Ismail with a simple idea: bake honest sourdough every day, and build a kitchen around it. The loaves still come first (long-fermented, made with stone-milled flours), and the rest of the menu grows out of them: toasted slices with truffle or kombu butter, focaccia sandwiches, brunch plates piled onto sourdough, and a counter full of laminated pastries.</p>
-        <p>After nearly four years in TTDI, a second home opened at Publika Shopping Gallery in August 2025. Both outlets are open daily from 8am to 10pm, serving brunch until 5pm and hearty plates, pasta and specialty coffee all day.</p>
+        <p>After nearly four years in TTDI, a second home opened at Publika Shopping Gallery in August 2025. ${esc(H.about)}, serving brunch until ${esc(H.brunchUntil)} and hearty plates, pasta and specialty coffee all day.</p>
       </div>
     </section>
     <section class="moods">
@@ -631,7 +768,7 @@
       <div class="wrap">
         <div class="section-head reveal"><h2>Made the slow way</h2></div>
         <div class="pillars">
-          <div class="pillar reveal"><h3>Real sourdough</h3><p>Eight signature loaves, naturally leavened, from a 400g country brown to a 90%-hydration focaccia.</p></div>
+          <div class="pillar reveal"><h3>Real sourdough</h3><p>${countWord(D.loaves.length)} signature loaves, naturally leavened, from a 400g country brown to a 90%-hydration focaccia.</p></div>
           <div class="pillar reveal"><h3>House-made</h3><p>Brioche buns, English muffins, focaccia, pickles, pestos and sauces, all made in our kitchen.</p></div>
           <div class="pillar reveal"><h3>Our own blend</h3><p>A house espresso blend of Brazilian, Nicaraguan and Ethiopian beans with notes of nuts, butterscotch and caramel.</p></div>
         </div>
@@ -724,7 +861,7 @@
   pages.notfound = () => `<section class="banner"><div class="wrap"><h1>Page not found</h1><p><a class="link-arrow" href="#home">Back to home</a></p></div></section>`;
 
   /* ------------------------------------------------------------------ footer */
-  const TICKER = ["Dine in", "Takeaway", hasGrab ? "Delivery via Beep & GrabFood" : "Delivery via Beep","Pre-orders", "Whole cakes", "Events", "Wholesale", "Open daily 8am to 10pm"];
+  const TICKER = ["Dine in", "Takeaway", hasGrab ? "Delivery via Beep & GrabFood" : "Delivery via Beep","Pre-orders", "Whole cakes", "Events", "Wholesale", ...H.ticker];
   const tickerRun = TICKER.map((t) => `<span>${esc(t)}</span>`).join("");
   $("#footer").innerHTML = `
     <div class="ticker" aria-label="${esc(TICKER.join(", "))}"><div class="ticker-track" aria-hidden="true">${tickerRun}${tickerRun}</div></div>
@@ -844,7 +981,7 @@
   const put = (el, tf, op) => { if (!el) return; el.style.transform = tf; if (op != null) el.style.opacity = op.toFixed(3); };
   // "Open every day" (a secondary moment, shorter pin than the bake): the clock runs 8am > 10pm, the sun climbs its arc
   // and sets into a moon, the ground goes cream > afternoon sand > cocoa > night, and the photo follows the time of day.
-  const DAY_GROUND = [[8, [255, 250, 241]], [12, [247, 238, 222]], [16, [238, 214, 180]], [18, [176, 112, 72]], [19.5, [74, 58, 43]], [22, [27, 22, 18]]];
+  const DAY_GROUND = [[8, [255, 250, 241]], [12, [247, 238, 222]], [16, [238, 214, 180]], [18, [176, 112, 72]], [19.5, [74, 58, 43]], [22, [27, 22, 18]]].map(([h, c]) => [dayAt(h), c]);
   const groundAt = (h) => {
     let i = 0; while (i < DAY_GROUND.length - 2 && DAY_GROUND[i + 1][0] <= h) i++;
     const [h0, a] = DAY_GROUND[i], [h1, b] = DAY_GROUND[i + 1], t = clamp01((h - h0) / (h1 - h0));
@@ -860,7 +997,7 @@
     day.classList.toggle("live", live);
     const shots = $$(".day-shot", day);
     if (!live) { day.style.removeProperty("--ground"); day.classList.remove("is-night"); shots.forEach((f) => f.classList.add("on")); return; }
-    const p = progress(day, $(".day-pin", day)), h = 8 + 14 * p;
+    const p = progress(day, $(".day-pin", day)), h = H.open + (H.close - H.open) * p;
     const g = groundAt(h);
     day.style.setProperty("--ground", `rgb(${g.join(",")})`);
     day.classList.toggle("is-night", lum(g) < 0.42);
@@ -869,9 +1006,8 @@
     const orb = $(".day-orb", day);
     orb.style.left = `${(x / 10).toFixed(2)}%`; orb.style.top = `${(y / 2).toFixed(2)}%`;
     $(".day-clip", day).setAttribute("width", x.toFixed(1));
-    day.style.setProperty("--moon", ramp(18.6, 19.4, h).toFixed(3));
-    const mins = Math.round(h * 4) * 15, hh = Math.floor(mins / 60) % 24, mm = mins % 60;
-    const clock = `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, "0")}<small>${hh < 12 ? "am" : "pm"}</small>`;
+    day.style.setProperty("--moon", ramp(dayAt(18.6), dayAt(19.4), h).toFixed(3));
+    const clock = clockAt(h);
     const c = $(".day-clock", day); if (c.innerHTML !== clock) c.innerHTML = clock;
     let at = 0; DAY.forEach((m, i) => { if (h >= m.h) at = i; });
     shots.forEach((f, i) => f.classList.toggle("on", i === at));
@@ -940,8 +1076,22 @@
   addEventListener("scroll", onScroll, { passive: true });
 
   /* ------------------------------------------------------------------ announcement bar */
-  if (store.hideAnnounce) $("#announce").classList.add("gone");
-  $("[data-dismiss]").addEventListener("click", () => { $("#announce").classList.add("gone"); store.hideAnnounce = true; save(); });
+  // hours text from H; an owner notice (content/hours.json) goes first and brings a dismissed bar back once
+  const annHours = $("[data-hours=short]"); if (annHours) annHours.textContent = H.short;
+  $$("[data-hours=drawer]").forEach((el) => { el.textContent = H.drawer; });
+  const desc = $("meta[name=description]");
+  if (desc) desc.content = desc.content.replace(/ Open daily[^.]*\.$/, "") + (H.same ? ` ${H.short}.` : ` Open daily: ${H.short}.`);
+  if (H.notice && annHours) {
+    const n = document.createElement("span"); n.className = "announce-notice"; n.textContent = H.notice;
+    const dot = document.createElement("span"); dot.className = "dot"; dot.textContent = "·";
+    annHours.before(n, " ", dot, " ");
+    // phones: just the notice and the pre-order link
+    const kids = [...annHours.parentNode.children], link = kids.find((el) => el.tagName === "A");
+    kids.forEach((el) => { if (el !== n && el !== link && el !== link.previousElementSibling) el.classList.add("hide-sm"); });
+  }
+  const annKey = H.notice || true;
+  if (store.hideAnnounce === annKey) $("#announce").classList.add("gone");
+  $("[data-dismiss]").addEventListener("click", () => { $("#announce").classList.add("gone"); store.hideAnnounce = annKey; save(); });
 
   /* ------------------------------------------------------------------ dropdowns (hover on desktop, click/keyboard too) */
   $$(".dd").forEach((dd) => {
@@ -1040,4 +1190,4 @@
 
   navigate();
   onScroll();
-})();
+}

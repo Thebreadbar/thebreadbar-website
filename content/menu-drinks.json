@@ -1,0 +1,263 @@
+{
+  "tab": "Drinks",
+  "sections": [
+    {
+      "title": "Signature Mocktails",
+      "items": [
+        {
+          "name": "Lemon Mousse Long Black",
+          "description": "cold brew, sun-dried orange, lemon mousse",
+          "priceHot": null,
+          "priceCold": 18,
+          "outlets": "both",
+          "photo": "/assets/photos/lemon-mousse-long-black.jpg",
+          "show": true
+        },
+        {
+          "name": "Yuzu Osmanthus Chamomile",
+          "description": "korean yuzu, osmanthus cold brew",
+          "priceHot": null,
+          "priceCold": 16.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Coconut Melon Oolong",
+          "description": "with lemon cream",
+          "priceHot": null,
+          "priceCold": 18,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Mango Oolong Sparkling",
+          "description": "with lemon cream",
+          "priceHot": null,
+          "priceCold": 18,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Butter Beer",
+          "description": "100% non-alcoholic: vanilla soda, homemade butter caramel, light cream",
+          "priceHot": null,
+          "priceCold": 17,
+          "outlets": "both",
+          "photo": "/assets/photos/butterbeer.jpg",
+          "show": true
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Lemonade",
+      "items": [
+        {
+          "name": "Green Apple Assamboi",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 16.5,
+          "outlets": "both",
+          "photo": "/assets/photos/green-apple-assamboi.jpg",
+          "show": true
+        },
+        {
+          "name": "Wild Jasmine",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 16.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Honey Yuzu",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 16.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Kombucha",
+      "items": [
+        {
+          "name": "Apple Peach",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 13.5,
+          "outlets": "both",
+          "photo": "/assets/photos/apple-peach-kombucha.jpg",
+          "show": true
+        },
+        {
+          "name": "Mango Mojito",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 13.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Tea",
+      "items": [
+        {
+          "name": "English Breakfast",
+          "description": "",
+          "priceHot": 12,
+          "priceCold": 13,
+          "outlets": "both",
+          "photo": "/assets/photos/hot-teas.jpg",
+          "show": true
+        },
+        {
+          "name": "French Earl Grey",
+          "description": "",
+          "priceHot": 12,
+          "priceCold": 13,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Chamomile",
+          "description": "",
+          "priceHot": 12,
+          "priceCold": 13,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Peppermint",
+          "description": "",
+          "priceHot": 12,
+          "priceCold": 13,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Fruits of Eden",
+          "description": "",
+          "priceHot": 12,
+          "priceCold": 13,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Chocolate",
+      "items": [
+        {
+          "name": "Classic Chocolate",
+          "description": "",
+          "priceHot": 14,
+          "priceCold": 15,
+          "outlets": "both",
+          "photo": "/assets/photos/hot-chocolate.jpg",
+          "show": true
+        },
+        {
+          "name": "Chocolate Hazelnut",
+          "description": "",
+          "priceHot": 16,
+          "priceCold": 17,
+          "outlets": "both",
+          "photo": "/assets/photos/chocolate-hazelnut.jpg",
+          "show": true
+        },
+        {
+          "name": "Tiramisu Chocolate",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 17.5,
+          "outlets": "both",
+          "photo": "/assets/photos/tiramisu-chocolate.jpg",
+          "show": true
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Others",
+      "items": [
+        {
+          "name": "Babycino",
+          "description": "warm / chilled",
+          "priceHot": null,
+          "priceCold": 8.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Honey Lemon",
+          "description": "",
+          "priceHot": 10.5,
+          "priceCold": 11.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Orange Juice",
+          "description": "",
+          "priceHot": null,
+          "priceCold": 13.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "Juice of the Week",
+          "description": "enquire with our team",
+          "priceHot": null,
+          "priceCold": 13.5,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        }
+      ],
+      "extras": []
+    },
+    {
+      "title": "Water (500ml)",
+      "items": [
+        {
+          "name": "Acqua Panna",
+          "description": "mineral",
+          "priceHot": null,
+          "priceCold": 16,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        },
+        {
+          "name": "San Pellegrino",
+          "description": "sparkling",
+          "priceHot": null,
+          "priceCold": 16,
+          "outlets": "both",
+          "photo": "",
+          "show": true
+        }
+      ],
+      "extras": []
+    }
+  ]
+}

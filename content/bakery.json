@@ -1,0 +1,241 @@
+{
+  "loaves": [
+    {
+      "name": "Country Brown Sourdough",
+      "price": 16,
+      "weight": 400,
+      "photo": "/assets/photos/bread-country-brown.jpg",
+      "flour": "Stone milled: Japanese strong flour",
+      "tasting": "",
+      "crust": "Medium hard",
+      "tang": "Medium",
+      "crumb": "Medium soft",
+      "inclusions": "None",
+      "hydration": 90,
+      "show": true
+    },
+    {
+      "name": "Brown Butter Oat Sourdough",
+      "price": 25,
+      "weight": 650,
+      "photo": "/assets/photos/bread-brown-butter-oat.jpg",
+      "flour": "Stone milled strong: wholemeal flour, French T65",
+      "tasting": "",
+      "crust": "Medium soft",
+      "tang": "Medium",
+      "crumb": "Soft",
+      "inclusions": "Brown butter, rolled oats",
+      "hydration": 75,
+      "show": true
+    },
+    {
+      "name": "Ancient Grain Sourdough",
+      "price": 25,
+      "weight": 650,
+      "photo": "/assets/photos/bread-ancient-grain.jpg",
+      "flour": "Stone milled: wholemeal flour, French T65, Japanese bread flour",
+      "tasting": "",
+      "crust": "Medium soft",
+      "tang": "Medium",
+      "crumb": "Soft",
+      "inclusions": "Cornmeal, flax seed, pumpkin seed, amaranth",
+      "hydration": 70,
+      "show": true
+    },
+    {
+      "name": "Wholemeal Rye Sourdough",
+      "price": 20,
+      "weight": 600,
+      "photo": "/assets/photos/bread-wholemeal-rye.jpg",
+      "flour": "Stone milled: wholemeal flour, dark German rye 15%",
+      "tasting": "",
+      "crust": "Medium hard",
+      "tang": "Medium",
+      "crumb": "Medium",
+      "inclusions": "None",
+      "hydration": 72,
+      "show": true
+    },
+    {
+      "name": "Toasted Millet Sourdough",
+      "price": 24,
+      "weight": 600,
+      "photo": "/assets/photos/bread-toasted-millet.jpg",
+      "flour": "Wholemeal flour, Japanese strong flour, French T65",
+      "tasting": "",
+      "crust": "Medium soft",
+      "tang": "Medium light",
+      "crumb": "Soft",
+      "inclusions": "Toasted millet grains",
+      "hydration": 75,
+      "show": true
+    },
+    {
+      "name": "Sourdough Focaccia with Mixed Olives & Sun-dried Tomatoes",
+      "price": 26,
+      "weight": 600,
+      "photo": "/assets/photos/bread-focaccia-olives.jpg",
+      "flour": "Stone milled: strong wholemeal flour, French T65",
+      "tasting": "",
+      "crust": "Medium soft",
+      "tang": "Medium",
+      "crumb": "Soft",
+      "inclusions": "Mixed olives, sun-dried tomatoes, fresh herbs",
+      "hydration": 90,
+      "show": true
+    },
+    {
+      "name": "Sourdough Focaccia with Cheddar Cheese & Sun-dried Tomatoes",
+      "price": 27,
+      "weight": 600,
+      "photo": "/assets/photos/bread-focaccia-cheddar.jpg",
+      "flour": "Stone milled: strong wholemeal flour, French T65",
+      "tasting": "",
+      "crust": "Medium soft",
+      "tang": "Medium",
+      "crumb": "Soft",
+      "inclusions": "Cheddar cheese, sun-dried tomatoes, fresh herbs",
+      "hydration": 90,
+      "show": true
+    },
+    {
+      "name": "Brioche Loaf",
+      "price": 26,
+      "weight": 600,
+      "photo": "/assets/photos/bread-brioche.jpg",
+      "flour": "Stone milled: Japanese bread flour",
+      "tasting": "Rich, buttery, fragrant · leavened with dry yeast",
+      "crust": "Soft",
+      "tang": "None",
+      "crumb": "Soft",
+      "inclusions": "Milk, eggs, butter, sugar",
+      "hydration": 60,
+      "show": true
+    }
+  ],
+  "pastries": [
+    {
+      "name": "Butter Croissant",
+      "price": 8.5,
+      "photo": "/assets/photos/butter-croissant.jpg",
+      "show": true
+    },
+    {
+      "name": "Pain Au Chocolat",
+      "price": 9,
+      "photo": "/assets/photos/pain-au-chocolat.jpg",
+      "show": true
+    },
+    {
+      "name": "Peanut Butter & Banana Pain Au Chocolat",
+      "price": 11.5,
+      "photo": "/assets/photos/pb-banana-pain-au-chocolat.jpg",
+      "show": true
+    },
+    {
+      "name": "Ham Cheese & Jalapeño Croissant",
+      "price": 14.5,
+      "photo": "/assets/photos/ham-cheese-jalapeno-croissant.jpg",
+      "show": true
+    },
+    {
+      "name": "Vanilla Cream & Peach Danish",
+      "price": 14,
+      "photo": "",
+      "show": true
+    },
+    {
+      "name": "Almond Croissant",
+      "price": 12.5,
+      "photo": "/assets/photos/almond-croissant.jpg",
+      "show": true
+    },
+    {
+      "name": "Pistachio Kouign-Amann",
+      "price": 16,
+      "photo": "/assets/photos/pistachio-kouign-amann.jpg",
+      "show": true,
+      "video": "kouign-amann"
+    },
+    {
+      "name": "Pecan Tart Financier",
+      "price": 15,
+      "photo": "",
+      "show": true
+    },
+    {
+      "name": "Crème Brûlée Danish",
+      "price": 15,
+      "photo": "/assets/photos/creme-brulee-danish.jpg",
+      "show": true
+    },
+    {
+      "name": "Apple Crumble Tart",
+      "price": 13,
+      "photo": "",
+      "show": true
+    },
+    {
+      "name": "Lemon Yuzu Meringue Tart",
+      "price": 15,
+      "photo": "/assets/photos/lemon-yuzu-meringue-tart.jpg",
+      "show": true
+    },
+    {
+      "name": "Korean Honey Butter Toast",
+      "price": 16,
+      "photo": "",
+      "show": true
+    },
+    {
+      "name": "Mont Blanc Tart",
+      "price": 16,
+      "photo": "",
+      "show": true
+    }
+  ],
+  "cakeSlices": [
+    {
+      "name": "Burnt Cheesecake with Matcha Cream",
+      "price": 17,
+      "show": true
+    },
+    {
+      "name": "Carrot & Walnut with Cream Cheese",
+      "price": 17,
+      "show": true
+    }
+  ],
+  "wholeCakes": [
+    {
+      "name": "Burnt Cheesecake with Matcha Cream",
+      "show": true
+    },
+    {
+      "name": "Callebaut Chocolate Ganache Cake with Salted Caramel",
+      "show": true
+    },
+    {
+      "name": "Carrot & Walnut Cake",
+      "show": true
+    },
+    {
+      "name": "Flourless Chocolate Cake",
+      "show": true
+    }
+  ],
+  "beans": [
+    {
+      "size": "250g",
+      "price": 40
+    },
+    {
+      "size": "500g",
+      "price": 75
+    },
+    {
+      "size": "1kg",
+      "price": 140
+    }
+  ]
+}

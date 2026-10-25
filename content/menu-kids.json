@@ -1,0 +1,45 @@
+{
+  "tab": "Kids",
+  "sections": [
+    {
+      "title": "Kids",
+      "note": "available all day",
+      "items": [
+        {
+          "name": "Big Baby Breakfast",
+          "description": "chicken patty, choice of eggs (scrambled / sunny-side-up / poached), mini croissant, side salad with cherry tomatoes",
+          "price": 21,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/big-baby-breakfast.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Chicken Meatball Spaghetti",
+          "description": "pomodoro sauce, mini croissant, side salad with cherry tomatoes",
+          "price": 22,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/kids-chicken-meatball-spaghetti.jpg",
+          "show": true,
+          "extras": []
+        },
+        {
+          "name": "Fish and Chips",
+          "description": "crispy coated seabass, chips, homemade tartar sauce",
+          "price": 24,
+          "pricePublika": null,
+          "outlets": "both",
+          "vegetarian": false,
+          "photo": "/assets/photos/fish-and-chips.jpg",
+          "show": true,
+          "extras": []
+        }
+      ],
+      "extras": []
+    }
+  ]
+}

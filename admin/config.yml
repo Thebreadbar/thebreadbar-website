@@ -1,0 +1,346 @@
+# Sveltia CMS settings for The Bread Bar's "Edit the website" page (https://thebreadbar.my/admin/).
+# Forms for content/*.json: the menu (one file per menu tab), bakery prices and opening hours. Saving commits the JSON
+# (and photo uploads to assets/uploads/) to the org repo; GitHub Pages republishes in ~1-2 min.
+# Our private Websites repo is the source of truth: publish-pages.ps1 pulls these commits back before it mirrors.
+# Field names must match what app.js reads (apply.menu / apply.bakery / apply.hours). Docs: https://sveltiacms.app/en/docs
+backend:
+  name: github
+  repo: Thebreadbar/thebreadbar-website
+  branch: main
+  # token only: "Sign In with GitHub" (OAuth) would need an OAuth server we don't run
+  auth_methods: [token]
+  commit_messages:
+    create: "Add {{collection}} \"{{slug}}\" (website editor)"
+    update: "Update {{collection}} \"{{slug}}\" (website editor)"
+    delete: "Delete {{collection}} \"{{slug}}\" (website editor)"
+    uploadMedia: "Upload \"{{path}}\" (website editor)"
+    deleteMedia: "Delete \"{{path}}\" (website editor)"
+
+site_url: https://thebreadbar.my
+display_url: https://thebreadbar.my
+
+# New photos go to assets/uploads. Uploads are turned into WebP, at most 1600 px, in the browser before saving.
+media_folder: assets/uploads
+public_folder: /assets/uploads
+media_libraries:
+  stock_assets: false # no stock-photo sites in the picker: only our own photos
+  all:
+    slugify_filename: true
+    max_file_size: 15000000
+    transformations:
+      raster_image:
+        format: webp
+        quality: 80
+        width: 1600
+        height: 1600
+
+# The photos already on the site, to pick from (read-only, so nothing in there can be deleted by accident).
+asset_collections:
+  - name: photos
+    label: Photos already on the site
+    icon: photo_library
+    media_folder: /assets/photos
+    public_folder: /assets/photos
+    readonly: true
+
+collections:
+  # ---------------------------------------------------------------- menu (one file per tab on the Menu page)
+  - name: menu
+    label: Menu
+    label_singular: menu tab
+    icon: restaurant_menu
+    description: >-
+      Each menu tab on the website has its own page here. Open a tab, then open a section (for example Small Plates)
+      to change a dish, its price or its photo, add a dish, or hide one for now.
+    editor:
+      preview: false
+    files:
+      - name: light
+        label: "Light (small plates, soup, sandwiches)"
+        file: content/menu-light.json
+        format: json
+        fields:
+          - &tab { label: Tab name, name: tab, widget: string, hint: "The name on the tab at the top of the Menu page." }
+          - &sections
+            label: Sections
+            name: sections
+            widget: list
+            label_singular: section
+            summary: "{{fields.title}}"
+            collapsed: true
+            fields:
+              - &title { label: Section heading, name: title, widget: string }
+              - &note { label: Small note next to the heading, name: note, widget: string, required: false, hint: "For example: available all day. Leave empty for none. (The Brunch note is filled in from Opening hours.)" }
+              - label: Dishes
+                name: items
+                widget: list
+                label_singular: dish
+                summary: "{{fields.name}}{{fields.show | ternary('', '  (hidden)')}}"
+                thumbnail: photo
+                collapsed: true
+                fields:
+                  - &name { label: Name, name: name, widget: string }
+                  - &description { label: Description, name: description, widget: text, required: false, hint: "The short line under the name. Leave empty for none." }
+                  - &price { label: Price (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1, required: false, hint: "Numbers only, for example 26.5. This price is used at both outlets unless you fill in the box below." }
+                  - &pricePublika { label: Different price at Publika (RM), name: pricePublika, widget: number, value_type: float, min: 0, step: 0.1, required: false, hint: "Leave empty if the price is the same at both outlets." }
+                  - &outlets
+                    label: Served at
+                    name: outlets
+                    widget: select
+                    default: both
+                    options:
+                      - { label: Both outlets, value: both }
+                      - { label: TTDI only, value: ttdi }
+                      - { label: Publika only, value: pub }
+                  - &vegetarian { label: Vegetarian (shows a small V), name: vegetarian, widget: boolean, default: false }
+                  - &photo { label: Photo, name: photo, widget: image, required: false, choose_url: false, hint: "Optional. Upload a new photo or pick one already on the site. Big photos are shrunk for you." }
+                  - &show { label: Show on the website, name: show, widget: boolean, default: true, hint: "Switch off to hide it for now (sold out, seasonal). It stays saved here for later." }
+                  - &extras
+                    label: Extra options under the dish
+                    name: extras
+                    widget: list
+                    label_singular: option
+                    summary: "{{fields.text}}  + RM {{fields.price}}"
+                    required: false
+                    hint: "For example: add-on poached egg, + RM 3.5. Leave empty for none."
+                    fields:
+                      - { label: Option, name: text, widget: string }
+                      - { label: Extra price (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1 }
+                  - &video { name: video, widget: hidden }
+                  - &link { name: link, widget: hidden }
+              - &sectionExtras
+                label: Options listed under this section
+                name: extras
+                widget: list
+                label_singular: option
+                summary: "{{fields.text}}  + RM {{fields.price}}"
+                required: false
+                hint: "Leave empty for none."
+                fields:
+                  - { label: Option, name: text, widget: string }
+                  - { label: Extra price (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1 }
+      - name: hearty
+        label: "Hearty (brunch, mains, pasta)"
+        file: content/menu-hearty.json
+        format: json
+        fields: [*tab, *sections]
+      - name: kids
+        label: Kids
+        file: content/menu-kids.json
+        format: json
+        fields: [*tab, *sections]
+      - name: dessert
+        label: Dessert
+        file: content/menu-dessert.json
+        format: json
+        fields: [*tab, *sections]
+      - name: coffee
+        label: "Coffee & Matcha"
+        file: content/menu-coffee.json
+        format: json
+        fields: &drinkFields
+          - *tab
+          - label: Sections
+            name: sections
+            widget: list
+            label_singular: section
+            summary: "{{fields.title}}"
+            collapsed: true
+            fields:
+              - *title
+              - label: Drinks
+                name: items
+                widget: list
+                label_singular: drink
+                summary: "{{fields.name}}{{fields.show | ternary('', '  (hidden)')}}"
+                thumbnail: photo
+                collapsed: true
+                fields:
+                  - *name
+                  - *description
+                  - { label: Hot price (RM), name: priceHot, widget: number, value_type: float, min: 0, step: 0.1, required: false, hint: "Leave empty if it is not served hot." }
+                  - { label: Cold price (RM), name: priceCold, widget: number, value_type: float, min: 0, step: 0.1, required: false, hint: "Leave empty if it is not served cold." }
+                  - *outlets
+                  - *photo
+                  - *show
+                  - *video
+              - *sectionExtras
+      - name: drinks
+        label: Drinks
+        file: content/menu-drinks.json
+        format: json
+        fields: *drinkFields
+      - name: addons
+        label: Add-ons
+        file: content/menu-addons.json
+        format: json
+        fields:
+          - *tab
+          - label: Sections
+            name: sections
+            widget: list
+            label_singular: section
+            summary: "{{fields.title}}"
+            collapsed: true
+            fields:
+              - *title
+              - *note
+              - label: Add-ons
+                name: items
+                widget: list
+                label_singular: add-on
+                summary: "{{fields.name}}{{fields.show | ternary('', '  (hidden)')}}"
+                collapsed: true
+                fields:
+                  - *name
+                  - *description
+                  - *price
+                  - *pricePublika
+                  - *outlets
+                  - *show
+
+  # ---------------------------------------------------------------- bakery counter
+  - name: bakery
+    label: Bakery prices
+    icon: bakery_dining
+    description: Sourdough loaves, pastries, cakes and coffee beans on the Bakery page (and the home page).
+    editor:
+      preview: false
+    files:
+      - name: bakery
+        label: Bakery
+        file: content/bakery.json
+        format: json
+        fields:
+          - label: Sourdough loaves
+            name: loaves
+            widget: list
+            label_singular: loaf
+            summary: "{{fields.name}}  RM {{fields.price}}{{fields.show | ternary('', '  (hidden)')}}"
+            thumbnail: photo
+            collapsed: true
+            fields:
+              - *name
+              - { label: Price (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1, hint: "Numbers only, for example 16." }
+              - { label: Weight (grams), name: weight, widget: number, value_type: int, min: 0 }
+              - { label: Photo, name: photo, widget: image, choose_url: false, hint: "Every loaf needs a photo. Upload a new one or pick one already on the site." }
+              - { label: Flour, name: flour, widget: string, required: false }
+              - { label: Tasting notes, name: tasting, widget: string, required: false, hint: "Optional. Leave empty for none." }
+              - { label: Crust, name: crust, widget: string, required: false }
+              - { label: Tang, name: tang, widget: string, required: false }
+              - { label: Crumb, name: crumb, widget: string, required: false }
+              - { label: Inclusions, name: inclusions, widget: string, required: false, hint: "For example: Toasted millet grains, or None." }
+              - { label: Hydration (%), name: hydration, widget: number, value_type: int, min: 0, max: 100, required: false }
+              - *show
+          - label: Pastries
+            name: pastries
+            widget: list
+            label_singular: pastry
+            summary: "{{fields.name}}  RM {{fields.price}}{{fields.show | ternary('', '  (hidden)')}}"
+            thumbnail: photo
+            collapsed: true
+            hint: "With a photo, a pastry shows in the photo grid. Without one, it shows in the list under it (Also at the counter)."
+            fields:
+              - *name
+              - { label: Price (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1, hint: "Numbers only, for example 8.5." }
+              - { label: Photo, name: photo, widget: image, required: false, choose_url: false }
+              - *show
+              - *video
+          - label: Cakes by the slice
+            name: cakeSlices
+            widget: list
+            label_singular: cake
+            summary: "{{fields.name}}  RM {{fields.price}}{{fields.show | ternary('', '  (hidden)')}}"
+            collapsed: true
+            fields:
+              - *name
+              - { label: Price per slice (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1 }
+              - *show
+          - label: Whole cakes (pre-order, no price shown)
+            name: wholeCakes
+            widget: list
+            label_singular: cake
+            summary: "{{fields.name}}{{fields.show | ternary('', '  (hidden)')}}"
+            collapsed: true
+            fields:
+              - *name
+              - *show
+          - label: House Blend coffee bean prices
+            name: beans
+            widget: list
+            label_singular: bag size
+            summary: "{{fields.size}}  RM {{fields.price}}"
+            hint: "Shown on the Bakery page, the home page and the Shop."
+            fields:
+              - { label: Bag size, name: size, widget: string, hint: "For example: 250g" }
+              - { label: Price (RM), name: price, widget: number, value_type: float, min: 0, step: 0.1 }
+
+  # ---------------------------------------------------------------- opening hours
+  - name: hours
+    label: Opening hours
+    icon: schedule
+    description: Opening hours for both outlets. Every place on the website that shows the hours follows these.
+    editor:
+      preview: false
+    files:
+      - name: hours
+        label: Opening hours
+        file: content/hours.json
+        format: json
+        fields:
+          - label: TTDI
+            name: ttdi
+            widget: object
+            fields:
+              - &opens
+                label: Opens at
+                name: opens
+                widget: select
+                options: &timeOptions
+                  - { label: "5:00 am", value: "05:00" }
+                  - { label: "5:30 am", value: "05:30" }
+                  - { label: "6:00 am", value: "06:00" }
+                  - { label: "6:30 am", value: "06:30" }
+                  - { label: "7:00 am", value: "07:00" }
+                  - { label: "7:30 am", value: "07:30" }
+                  - { label: "8:00 am", value: "08:00" }
+                  - { label: "8:30 am", value: "08:30" }
+                  - { label: "9:00 am", value: "09:00" }
+                  - { label: "9:30 am", value: "09:30" }
+                  - { label: "10:00 am", value: "10:00" }
+                  - { label: "10:30 am", value: "10:30" }
+                  - { label: "11:00 am", value: "11:00" }
+                  - { label: "11:30 am", value: "11:30" }
+                  - { label: "12:00 noon", value: "12:00" }
+                  - { label: "12:30 pm", value: "12:30" }
+                  - { label: "1:00 pm", value: "13:00" }
+                  - { label: "1:30 pm", value: "13:30" }
+                  - { label: "2:00 pm", value: "14:00" }
+                  - { label: "2:30 pm", value: "14:30" }
+                  - { label: "3:00 pm", value: "15:00" }
+                  - { label: "3:30 pm", value: "15:30" }
+                  - { label: "4:00 pm", value: "16:00" }
+                  - { label: "4:30 pm", value: "16:30" }
+                  - { label: "5:00 pm", value: "17:00" }
+                  - { label: "5:30 pm", value: "17:30" }
+                  - { label: "6:00 pm", value: "18:00" }
+                  - { label: "6:30 pm", value: "18:30" }
+                  - { label: "7:00 pm", value: "19:00" }
+                  - { label: "7:30 pm", value: "19:30" }
+                  - { label: "8:00 pm", value: "20:00" }
+                  - { label: "8:30 pm", value: "20:30" }
+                  - { label: "9:00 pm", value: "21:00" }
+                  - { label: "9:30 pm", value: "21:30" }
+                  - { label: "10:00 pm", value: "22:00" }
+                  - { label: "10:30 pm", value: "22:30" }
+                  - { label: "11:00 pm", value: "23:00" }
+                  - { label: "11:30 pm", value: "23:30" }
+                  - { label: "12:00 midnight", value: "24:00" }
+              - &closes { label: Closes at, name: closes, widget: select, options: *timeOptions }
+          - label: Publika
+            name: publika
+            widget: object
+            fields: [*opens, *closes]
+          - { label: Brunch served from, name: brunchFrom, widget: select, options: *timeOptions }
+          - { label: Brunch served until, name: brunchUntil, widget: select, options: *timeOptions }
+          - { label: Notice in the top bar (optional), name: notice, widget: string, required: false, hint: "For example: Closed on 1 January for New Year. It shows first in the bar at the top of every page. Leave empty for none." }
