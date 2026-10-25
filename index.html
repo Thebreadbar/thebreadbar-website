@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- DRAFT for review: remove the robots line below when the site goes live -->
+<meta name="robots" content="noindex, nofollow">
+<title>The Bread Bar</title>
+<meta name="description" content="Handcrafted sourdough, pastries, all-day brunch and specialty coffee in TTDI and Publika, Kuala Lumpur. Open daily 8am to 10pm.">
+<link rel="icon" href="assets/logo-dark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Oswald:wght@500;600&family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=6f9ad220b7">
+</head>
+<body>
+
+<div class="announce" id="announce">
+  <p><span>Open daily 8am to 10pm</span> <span class="dot">·</span> <span>TTDI &amp; Publika</span> <span class="dot">·</span> <a href="#bakery">Pre-order whole loaves &amp; cakes →</a></p>
+  <button class="announce-x" aria-label="Dismiss" data-dismiss>&times;</button>
+</div>
+
+<header class="site-header" id="header">
+  <div class="hdr">
+    <button class="burger" aria-label="Open menu" aria-expanded="false" data-drawer-open><span></span><span></span><span></span></button>
+
+    <nav class="nav nav-left" aria-label="Primary">
+      <a href="#menu" class="nav-link" data-route="menu">Menu</a>
+      <a href="#bakery" class="nav-link" data-route="bakery">Bakery</a>
+      <a href="#shop" class="nav-link" data-route="shop">Shop</a>
+      <div class="dd">
+        <button class="nav-link dd-btn" aria-expanded="false" data-route="locations">Locations <i class="chev"></i></button>
+        <div class="dd-panel dd-wide">
+          <a href="#locations-ttdi" class="dd-card">
+            <img src="assets/photos/sourdough-slices.jpg" alt="" loading="lazy">
+            <span><b>TTDI</b><small>57, Lorong Rahim Kajai 13</small></span>
+          </a>
+          <a href="#locations-publika" class="dd-card">
+            <img src="assets/photos/salmon-bowl.jpg" alt="" loading="lazy">
+            <span><b>Publika</b><small>Level G2, Publika Shopping Gallery</small></span>
+          </a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="nav-link dd-btn" aria-expanded="false" data-route="about">About <i class="chev"></i></button>
+        <div class="dd-panel">
+          <a href="#about">Our Story</a>
+          <a href="#bakery-loaves">Our Sourdough</a>
+          <a href="#events">Events &amp; Private Dining</a>
+          <a href="#events-wholesale">Wholesale</a>
+        </div>
+      </div>
+    </nav>
+
+    <a href="#home" class="logo" aria-label="The Bread Bar, home"><img src="assets/logo-dark.png" alt="The Bread Bar" width="276" height="195"></a>
+
+    <nav class="nav nav-right" aria-label="Actions">
+      <button class="btn btn-ghost btn-order btn-reserve" data-chooser="reserve">Reserve</button>
+      <button class="btn btn-order" data-chooser="order">Order</button>
+    </nav>
+  </div>
+</header>
+
+<!-- mobile drawer -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-scrim" data-drawer-close></div>
+  <aside class="drawer-panel">
+    <div class="drawer-top">
+      <img src="assets/logo-dark.png" alt="The Bread Bar" class="drawer-logo" width="276" height="195">
+      <button class="drawer-x" aria-label="Close menu" data-drawer-close>&times;</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#home">Home</a>
+      <a href="#menu">Menu</a>
+      <a href="#bakery">Bakery</a>
+      <a href="#shop">Shop</a>
+      <details>
+        <summary>Locations</summary>
+        <a href="#locations-ttdi">TTDI</a>
+        <a href="#locations-publika">Publika</a>
+      </details>
+      <details>
+        <summary>About</summary>
+        <a href="#about">Our Story</a>
+        <a href="#bakery-loaves">Our Sourdough</a>
+        <a href="#events">Events &amp; Private Dining</a>
+        <a href="#events-wholesale">Wholesale</a>
+      </details>
+    </nav>
+    <div class="drawer-cta">
+      <button class="btn btn-ghost" data-chooser="reserve">Reserve</button>
+      <button class="btn" data-chooser="order">Order delivery</button>
+    </div>
+    <p class="drawer-foot">Open daily · 8am to 10pm</p>
+  </aside>
+</div>
+
+<main id="app" class="page" tabindex="-1"></main>
+
+<footer class="site-footer" id="footer"></footer>
+
+<!-- outlet chooser (Order / Reserve) -->
+<div class="modal" id="chooser" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="chooser-title">
+  <div class="modal-scrim" data-modal-close></div>
+  <div class="modal-box">
+    <button class="modal-x" aria-label="Close" data-modal-close>&times;</button>
+    <p class="eyebrow" id="chooser-eyebrow"></p>
+    <h2 id="chooser-title"></h2>
+    <div class="chooser-grid" id="chooser-grid"></div>
+  </div>
+</div>
+
+<!-- photo lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-scrim" data-lb-close></div>
+  <figure>
+    <img alt="">
+    <figcaption></figcaption>
+  </figure>
+  <button class="modal-x lb-x" aria-label="Close" data-lb-close>&times;</button>
+</div>
+
+<script src="data.js?v=f0b35eed29"></script>
+<script src="app.js?v=7000948b45"></script>
+</body>
+</html>
