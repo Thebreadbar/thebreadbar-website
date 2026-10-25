@@ -3,8 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Bread Bar</title>
+<!-- site base: every relative link/asset resolves from here; publish-pages.ps1 writes it per target (preview = sub-folder) -->
+<base href="/">
+<!-- head tags per page (seo.js): baked per route by build-pages.mjs at publish, refreshed by app.js in the browser -->
+<!-- seo -->
+<title>The Bread Bar · Sourdough Bakery &amp; Café in TTDI &amp; Publika, KL</title>
 <meta name="description" content="Handcrafted sourdough, pastries, all-day brunch and specialty coffee in TTDI and Publika, Kuala Lumpur. Open daily 8am to 10pm.">
+<link rel="canonical" href="https://thebreadbar.my/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Bread Bar">
+<meta property="og:locale" content="en_MY">
+<meta property="og:title" content="The Bread Bar · Sourdough Bakery &amp; Café in TTDI &amp; Publika, KL">
+<meta property="og:description" content="Handcrafted sourdough, pastries, all-day brunch and specialty coffee in TTDI and Publika, Kuala Lumpur. Open daily 8am to 10pm.">
+<meta property="og:url" content="https://thebreadbar.my/">
+<meta property="og:image" content="https://thebreadbar.my/assets/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sourdough loaves from The Bread Bar, TTDI and Publika, Kuala Lumpur">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Bread Bar · Sourdough Bakery &amp; Café in TTDI &amp; Publika, KL">
+<meta name="twitter:description" content="Handcrafted sourdough, pastries, all-day brunch and specialty coffee in TTDI and Publika, Kuala Lumpur. Open daily 8am to 10pm.">
+<meta name="twitter:image" content="https://thebreadbar.my/assets/share.jpg">
+<script type="application/ld+json" id="ld">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://thebreadbar.my/#organization","name":"The Bread Bar","legalName":"The Bread Bar Sdn Bhd","url":"https://thebreadbar.my/","logo":"https://thebreadbar.my/assets/logo-dark.png","image":"https://thebreadbar.my/assets/share.jpg","sameAs":["https://www.instagram.com/thebreadbarmy/","https://linktr.ee/thebreadbarmy"]},{"@type":"WebSite","@id":"https://thebreadbar.my/#website","name":"The Bread Bar","url":"https://thebreadbar.my/","inLanguage":"en-MY","publisher":{"@id":"https://thebreadbar.my/#organization"}},{"@type":["Bakery","CafeOrCoffeeShop"],"@id":"https://thebreadbar.my/locations/ttdi/#place","name":"The Bread Bar TTDI","url":"https://thebreadbar.my/locations/ttdi/","image":["https://thebreadbar.my/assets/photos/ttdi-storefront.jpg"],"telephone":"+601112005626","address":{"@type":"PostalAddress","streetAddress":"57, Lorong Rahim Kajai 13, Taman Tun Dr Ismail","postalCode":"60000","addressLocality":"Kuala Lumpur","addressRegion":"Kuala Lumpur","addressCountry":"MY"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"08:00","closes":"22:00"}],"servesCuisine":["Bakery","Brunch","Coffee"],"menu":"https://thebreadbar.my/menu/","acceptsReservations":true,"hasMap":"https://share.google/Jn0qHPu34NnUkPvrp","parentOrganization":{"@id":"https://thebreadbar.my/#organization"},"priceRange":"RM 8.50-78"},{"@type":["Bakery","CafeOrCoffeeShop"],"@id":"https://thebreadbar.my/locations/publika/#place","name":"The Bread Bar @ Publika","url":"https://thebreadbar.my/locations/publika/","image":["https://thebreadbar.my/assets/photos/salmon-bowl.jpg"],"telephone":"+60124365626","address":{"@type":"PostalAddress","streetAddress":"Lot 52 & 53, Block B3, Level G2, Publika Shopping Gallery, 1 Jalan Dutamas 1, Solaris Dutamas","postalCode":"50480","addressLocality":"Kuala Lumpur","addressRegion":"Kuala Lumpur","addressCountry":"MY"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"08:00","closes":"22:00"}],"servesCuisine":["Bakery","Brunch","Coffee"],"menu":"https://thebreadbar.my/menu/","acceptsReservations":true,"hasMap":"https://share.google/i3GjOkWs9iEn0jMtE","parentOrganization":{"@id":"https://thebreadbar.my/#organization"},"priceRange":"RM 8.50-78"}]}</script>
+<!-- /seo -->
 <link rel="icon" href="assets/logo-dark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +35,7 @@
 <body>
 
 <div class="announce" id="announce">
-  <p><span data-hours="short">Open daily 8am to 10pm</span> <span class="dot">·</span> <span>TTDI &amp; Publika</span> <span class="dot">·</span> <a href="#bakery">Pre-order whole loaves &amp; cakes →</a></p>
+  <p><span data-hours="short">Open daily 8am to 10pm</span> <span class="dot">·</span> <span>TTDI &amp; Publika</span> <span class="dot">·</span> <a href="bakery/">Pre-order whole loaves &amp; cakes →</a></p>
   <button class="announce-x" aria-label="Dismiss" data-dismiss>&times;</button>
 </div>
 
@@ -23,17 +44,17 @@
     <button class="burger" aria-label="Open menu" aria-expanded="false" data-drawer-open><span></span><span></span><span></span></button>
 
     <nav class="nav nav-left" aria-label="Primary">
-      <a href="#menu" class="nav-link" data-route="menu">Menu</a>
-      <a href="#bakery" class="nav-link" data-route="bakery">Bakery</a>
-      <a href="#shop" class="nav-link" data-route="shop">Shop</a>
+      <a href="menu/" class="nav-link" data-route="menu">Menu</a>
+      <a href="bakery/" class="nav-link" data-route="bakery">Bakery</a>
+      <a href="shop/" class="nav-link" data-route="shop">Shop</a>
       <div class="dd">
         <button class="nav-link dd-btn" aria-expanded="false" data-route="locations">Locations <i class="chev"></i></button>
         <div class="dd-panel dd-wide">
-          <a href="#locations-ttdi" class="dd-card">
+          <a href="locations/ttdi/" class="dd-card">
             <img src="assets/photos/sourdough-slices.jpg" alt="" loading="lazy">
             <span><b>TTDI</b><small>57, Lorong Rahim Kajai 13</small></span>
           </a>
-          <a href="#locations-publika" class="dd-card">
+          <a href="locations/publika/" class="dd-card">
             <img src="assets/photos/salmon-bowl.jpg" alt="" loading="lazy">
             <span><b>Publika</b><small>Level G2, Publika Shopping Gallery</small></span>
           </a>
@@ -42,15 +63,15 @@
       <div class="dd">
         <button class="nav-link dd-btn" aria-expanded="false" data-route="about">About <i class="chev"></i></button>
         <div class="dd-panel">
-          <a href="#about">Our Story</a>
-          <a href="#bakery-loaves">Our Sourdough</a>
-          <a href="#events">Events &amp; Private Dining</a>
-          <a href="#events-wholesale">Wholesale</a>
+          <a href="about/">Our Story</a>
+          <a href="bakery/#loaves">Our Sourdough</a>
+          <a href="events/">Events &amp; Private Dining</a>
+          <a href="events/wholesale/">Wholesale</a>
         </div>
       </div>
     </nav>
 
-    <a href="#home" class="logo" aria-label="The Bread Bar, home"><img src="assets/logo-dark.png" alt="The Bread Bar" width="276" height="195"></a>
+    <a href="./" class="logo" aria-label="The Bread Bar, home"><img src="assets/logo-dark.png" alt="The Bread Bar" width="276" height="195"></a>
 
     <nav class="nav nav-right" aria-label="Actions">
       <button class="btn btn-ghost btn-order btn-reserve" data-chooser="reserve">Reserve</button>
@@ -68,21 +89,21 @@
       <button class="drawer-x" aria-label="Close menu" data-drawer-close>&times;</button>
     </div>
     <nav class="drawer-nav">
-      <a href="#home">Home</a>
-      <a href="#menu">Menu</a>
-      <a href="#bakery">Bakery</a>
-      <a href="#shop">Shop</a>
+      <a href="./">Home</a>
+      <a href="menu/">Menu</a>
+      <a href="bakery/">Bakery</a>
+      <a href="shop/">Shop</a>
       <details>
         <summary>Locations</summary>
-        <a href="#locations-ttdi">TTDI</a>
-        <a href="#locations-publika">Publika</a>
+        <a href="locations/ttdi/">TTDI</a>
+        <a href="locations/publika/">Publika</a>
       </details>
       <details>
         <summary>About</summary>
-        <a href="#about">Our Story</a>
-        <a href="#bakery-loaves">Our Sourdough</a>
-        <a href="#events">Events &amp; Private Dining</a>
-        <a href="#events-wholesale">Wholesale</a>
+        <a href="about/">Our Story</a>
+        <a href="bakery/#loaves">Our Sourdough</a>
+        <a href="events/">Events &amp; Private Dining</a>
+        <a href="events/wholesale/">Wholesale</a>
       </details>
     </nav>
     <div class="drawer-cta">
@@ -119,6 +140,7 @@
 </div>
 
 <script src="data.js?v=bf5c458a92"></script>
-<script src="app.js?v=cf10133d26"></script>
+<script src="seo.js?v=b5bf9921f3"></script>
+<script src="app.js?v=f83d44c9da"></script>
 </body>
 </html>
